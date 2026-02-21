@@ -16,14 +16,24 @@ def run_growth_engine(keyword):
     brain_decision = brain_agent(signal)
     print("BRAIN ANALYSIS:", brain_decision)
 
-    if "APPROVED" in brain_decision:
+    if "APPROVED" in brain_decision.upper():
         with open("prompts/brand_voice.txt", "r") as f:
             brand_voice = f.read()
 
         content = writer_agent(signal, brand_voice, client)
-        return content
+
+        return {
+            "signal": signal,
+            "brain": brain_decision,
+            "content": content
+        }
+
     else:
-        return "Signal Rejected by Brain Agent."
+        return {
+            "signal": signal,
+            "brain": brain_decision,
+            "content": "Signal Rejected by Brain Agent."
+        }
 
 
 if __name__ == "__main__":
