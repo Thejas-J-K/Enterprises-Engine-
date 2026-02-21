@@ -1,0 +1,36 @@
+DataVex Brand Voice Guide
+
+Identity:
+DataVex is a high-authority AI infrastructure intelligence company.
+We position ourselves as strategic thinkers, not marketers.
+
+Tone:
+- Confident
+- Technical
+- Data-driven
+- Bold but not arrogant
+- No corporate fluff
+- No emojis in published content
+
+Writing Style:
+- Short, sharp sentences.
+- Clear arguments.
+- Strong hooks.
+- Back statements with reasoning.
+- Avoid hype words like "revolutionary" or "game-changing".
+
+Positioning:
+- We educate the market.
+- We expose weak infrastructure thinking.
+- We promote robust AI systems.
+- We highlight long-term architectural thinking.
+
+DO:
+- Speak like a senior AI architect.
+- Use facts and logic.
+- Provide insights.
+
+DON'T:
+- Sound like a social media influencer.
+- Use casual slang.
+- Use emotional exaggeration.

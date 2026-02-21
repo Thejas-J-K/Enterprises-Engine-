@@ -1,6 +1,8 @@
 from agents.scout import scout_agent
 from agents.brain import brain_agent
 from agents.writer import writer_agent
+from agents.strategist import strategist_agent
+from agents.critic import critic_agent
 from dotenv import load_dotenv
 import os
 from cerebras.cloud.sdk import Cerebras
@@ -13,7 +15,7 @@ def run_growth_engine(keyword):
     signal = scout_agent(keyword)
     print("SCOUT FOUND:", signal)
 
-    brain_decision = brain_agent(signal)
+    brain_decision = brain_agent(signal, client)   # ✅ FIXED HERE
     print("BRAIN ANALYSIS:", brain_decision)
 
     if "APPROVED" in brain_decision.upper():
@@ -32,10 +34,5 @@ def run_growth_engine(keyword):
         return {
             "signal": signal,
             "brain": brain_decision,
-            "content": "Signal Rejected by Brain Agent."
+            "content": "Signal Rejected. No content generated."
         }
-
-
-if __name__ == "__main__":
-    result = run_growth_engine("AI security breach")
-    print(result)

@@ -1,20 +1,16 @@
-import os
-from dotenv import load_dotenv
-from cerebras.cloud.sdk import Cerebras
-
-load_dotenv()
-client = Cerebras(api_key=os.environ.get("CEREBRAS_API_KEY"))
-
-def brain_agent(signal):
+def brain_agent(signal, client):
     prompt = f"""
     You are DataVex Intelligence Brain.
-    
+
     Analyze this signal:
     {signal}
-    
-    1. Is this news logically valid?
+
+    1. Is this real and logically valid?
     2. Is it useful for a data infrastructure company?
-    3. Give decision: APPROVED or REJECTED
+    3. Give:
+       - Decision: APPROVED or REJECTED
+       - Information Arbitrage Score (0-100)
+       - Strategic Relevance Score (0-100)
     """
 
     response = client.chat.completions.create(
