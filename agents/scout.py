@@ -7,13 +7,17 @@ load_dotenv()
 SERPER_API_KEY = os.getenv("SERPER_API_KEY")
 
 def scout_agent(keyword):
-
     url = "https://google.serper.dev/news"
-
+    
+    # --- ADDED BROAD SEARCH LOGIC HERE ---
+    # Instead of just searching for "DataVex", we search for industry shifts
+    search_query = f"latest {keyword} technical trends industry " 
+    
     payload = {
-        "q": keyword,
+        "q": search_query,  # <--- Use the new broader query here
         "gl": "us",
-        "hl": "en"
+        "hl": "en",
+        "num": 5 # Fetching top 5 helps get better variety for the Brain to pick from
     }
 
     headers = {
@@ -31,6 +35,7 @@ def scout_agent(keyword):
     if "news" not in data or len(data["news"]) == 0:
         return "No relevant news found."
 
+    # Pick the first result
     top_news = data["news"][0]
 
     title = top_news.get("title", "")
