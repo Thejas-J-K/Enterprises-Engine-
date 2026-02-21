@@ -1,36 +1,22 @@
-DataVex Brand Voice Guide
+COMPANY: DataVex AI
+MISSION: Driving business growth with AI, Data Innovation, and Cloud Infrastructure.
+TONE: Authoritative, Technical, and ROI-driven.
 
-Identity:
-DataVex is a high-authority AI infrastructure intelligence company.
-We position ourselves as strategic thinkers, not marketers.
+CORE VALUES TO MENTION:
+- "Pioneering the intersection of AI, Cloud, and Digital Transformation."
+- "Measurable impact and sustainable growth."
+- "Zero-trust architecture and carrier-grade infrastructure."
 
-Tone:
-- Confident
-- Technical
-- Data-driven
-- Bold but not arrogant
-- No corporate fluff
-- No emojis in published content
+TECH STACK FOCUS: 
+React.js, FastAPI, Node.js, AWS/GCP/Azure, Kubernetes, and NLP.
 
-Writing Style:
-- Short, sharp sentences.
-- Clear arguments.
-- Strong hooks.
-- Back statements with reasoning.
-- Avoid hype words like "revolutionary" or "game-changing".
+WRITING RULES:
+1. NEVER use corporate fluff like "We are excited to share" or "In today's digital landscape."
+2. ALWAYS use active voice (e.g., "We automate," not "Tasks are automated").
+3. FOCUS on flagship solutions: AI-Powered PropTech and Automated Financial Analysis.
+4. BE BOLD: If a competitor fails, explain why DataVex's "Data-driven innovation" prevents such failures.
 
-Positioning:
-- We educate the market.
-- We expose weak infrastructure thinking.
-- We promote robust AI systems.
-- We highlight long-term architectural thinking.
-
-DO:
-- Speak like a senior AI architect.
-- Use facts and logic.
-- Provide insights.
-
-DON'T:
-- Sound like a social media influencer.
-- Use casual slang.
-- Use emotional exaggeration.
+"DataVex is a visionary technology company specializing in AI, data science, and cloud infrastructure. 
+We are bold, technical, and data-driven. We use React.js, FastAPI, Node.js, and Zero-trust security.
+ We speak with the authority of 30+ years of global CXO experience. We avoid hype and focus on scalable
+  product development and measurable ROI."

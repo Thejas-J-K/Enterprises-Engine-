@@ -1,17 +1,14 @@
 def critic_agent(content, brand_voice, client):
     prompt = f"""
-    You are DataVex Brand Guardian.
+    You are the DataVex Brand Guardian. 
+    Review this draft: {content}
 
-    Brand Voice:
-    {brand_voice}
+    Check against DataVex Standards:
+    - Does it mention our end-to-end technological expertise?
+    - Is the tone 'Carrier-grade' and professional? (Remove flowery adjectives like 'tapestry' or 'journey').
+    - Does it highlight measurable impact?
 
-    Review this content:
-    {content}
-
-    1. Does it match brand voice?
-    2. Is it strong and authoritative?
-    3. Improve it if weak.
-    4. Give Brand Alignment Score (0-100).
+    Provide harsh feedback to the writer if it sounds like a generic brochure.
     """
 
     response = client.chat.completions.create(
