@@ -5,9 +5,6 @@ import uuid
 import json
 from datetime import datetime
 import os
-import requests
-from PIL import Image
-from io import BytesIO
 
 # ===============================
 # PAGE CONFIG
@@ -19,7 +16,7 @@ st.set_page_config(
 )
 
 # ===============================
-# PROFESSIONAL STYLING
+# STYLING
 # ===============================
 st.markdown("""
     <style>
@@ -31,9 +28,6 @@ st.markdown("""
         background-color: #111827;
         color: white;
         font-weight: 600;
-    }
-    .stTextArea textarea {
-        font-family: 'Inter', sans-serif;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -72,101 +66,104 @@ if st.session_state.result:
 
     res = st.session_state.result
 
-    # ===============================
-    # STEP 1 — INTELLIGENCE
-    # ===============================
+    # ============================================
+    # STEP 1 — SHOW 5 NEWS + SELECTED SIGNAL
+    # ============================================
     st.header("🧠 Step 1: Intelligence Analysis")
 
-    col1, col2 = st.columns(2)
+    # 🔹 Show 5 News
+    st.subheader("📡 Top 5 Enterprise Signals Scouted")
 
-    with col1:
-        st.subheader("📡 Analyst Signal")
-        st.info(res.get("signal", "No signal detected."))
+    for i, news in enumerate(res.get("all_news", []), start=1):
+        with st.expander(f"{i}. {news.get('title')}"):
+            st.write(f"**Source:** {news.get('source')}")
+            st.write(f"**Published:** {news.get('published_at')}")
+            st.write(f"[Read Article]({news.get('url')})")
 
-    with col2:
-        st.subheader("🧩 Strategic Positioning")
-        st.success("Signal aligned with DataVex growth thesis.")
+    # 🔹 Show Selected Priority News
+    st.subheader("🎯 Selected High-Priority Signal")
 
-    # ===============================
+    selected = res.get("signal")
+
+    if isinstance(selected, dict):
+        st.success(selected.get("title"))
+        st.write(f"**Reasoning:** {selected.get('reasoning')}")
+        st.write(f"**Source:** {selected.get('source')}")
+        st.write(f"[View Article]({selected.get('url')})")
+    else:
+        st.warning("No signal selected.")
+
+    # ============================================
     # STEP 2 — STRATEGY
-    # ===============================
+    # ============================================
     st.divider()
     st.header("📈 Step 2: Growth Strategy Brief")
 
     with st.expander("View Strategy Rationale", expanded=True):
-        st.write(res.get("strategy", "Strategy not generated."))
+        st.write(res.get("strategy", ""))
 
-    # ===============================
+    # ============================================
     # STEP 3 — CREATOR TRACE
-    # ===============================
+    # ============================================
     st.divider()
     st.header("⚡ Step 3: Real-Time Creator Intelligence")
 
-    trace_col1, trace_col2 = st.columns(2)
+    col1, col2 = st.columns(2)
 
-    with trace_col1:
-        st.markdown("**Initial Creative Draft (Internal)**")
+    with col1:
+        st.markdown("**Initial Draft (Internal)**")
         st.text_area(
-            "draft_box",
+            "draft",
             res.get("first_draft", ""),
-            height=200,
-            disabled=True,
-            label_visibility="collapsed"
+            height=250,
+            disabled=True
         )
 
-    with trace_col2:
-        st.markdown("**Self-Critique & Brand Alignment Feedback**")
-        st.warning(res.get("trace", "No critique log available."))
+    with col2:
+        st.markdown("**Self-Critique Feedback**")
+        st.warning(res.get("trace", ""))
 
-    # ===============================
-    # STEP 4 — VISUAL + VIDEO
-    # ===============================
+    # ============================================
+    # STEP 4 — IMAGE + VIDEO
+    # ============================================
     st.divider()
     st.header("🎨 Step 4: Multimodal Asset Generation")
 
+    image_data = res.get("image")
 
-    # ✅ Correct image rendering
-    if res.get("image"):
-     st.subheader("🖼️ AI-Generated Visual")
+    if image_data:
+        st.subheader("🖼️ AI-Generated Visual")
 
-    try:
-        response = requests.get(res["image"])
-        img = Image.open(BytesIO(response.content))
-        st.image(img, width=700)
-    except Exception as e:
-        st.error("Image failed to load.")
-        st.write("Image URL:", res["image"])
-    # ✅ Clean storyboard display
+        if isinstance(image_data, bytes):
+            st.image(image_data, width=700)
+        elif isinstance(image_data, str):
+            st.image(image_data, width=700)
+
+    else:
+        st.warning("⚠️ Image unavailable (API quota or error).")
+
     if res.get("video"):
-        st.subheader("🎬 AI-Generated Video Storyboard")
-        st.markdown(res["video"])
+        st.subheader("🎬 AI Video Storyboard")
+        st.markdown(res.get("video"))
 
-    # ===============================
+    # ============================================
     # STEP 5 — FINAL CONTENT
-    # ===============================
+    # ============================================
     st.divider()
     st.header("📝 Step 5: Final Publish-Ready Content")
 
     edited_content = st.text_area(
-        "Human Review & Edit Before Publishing",
+        "Edit Before Publishing",
         value=res.get("content", ""),
-        height=400,
-        key="editor"
+        height=400
     )
 
-    # ===============================
+    # ============================================
     # PUBLISH WORKFLOW
-    # ===============================
-    if st.button("🚀 Approve & Auto-Publish to DataVex Channels"):
+    # ============================================
+    if st.button("🚀 Approve & Auto-Publish"):
 
-        with st.status("Executing Autonomous Publish Pipeline...") as status:
-            st.write("🔐 Authenticating API credentials...")
-            time.sleep(1)
-
-            st.write("📤 Uploading image asset...")
-            time.sleep(1)
-
-            st.write("🌐 Posting to LinkedIn & X...")
+        with st.status("Executing Publish Pipeline...") as status:
             time.sleep(1)
 
             tweet_id = str(uuid.uuid4())[:8]
@@ -174,7 +171,6 @@ if st.session_state.result:
 
             post_data = {
                 "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                "tweet_id": tweet_id,
                 "tweet_url": tweet_url,
                 "content": edited_content
             }
@@ -192,17 +188,16 @@ if st.session_state.result:
                 json.dump(posts, f, indent=4)
 
             status.update(
-                label="✅ Successfully Published Across Channels",
-                state="complete",
-                expanded=False
+                label="✅ Successfully Published",
+                state="complete"
             )
 
         st.success(f"🔗 View Live Post: {tweet_url}")
         st.balloons()
 
-# ===============================
-# HISTORY LOG
-# ===============================
+# ============================================
+# HISTORY
+# ============================================
 st.divider()
 st.header("📜 Published Content Log")
 
@@ -213,9 +208,9 @@ if os.path.exists("posted_content.json"):
     if posts:
         for post in reversed(posts):
             with st.expander(f"🕒 {post['timestamp']}"):
-                st.write(f"**Post URL:** {post['tweet_url']}")
+                st.write(f"[View Post]({post['tweet_url']})")
                 st.write(post["content"])
     else:
-        st.info("No published posts yet.")
+        st.info("No posts yet.")
 else:
-    st.info("No published posts yet.")
+    st.info("No posts yet.")
