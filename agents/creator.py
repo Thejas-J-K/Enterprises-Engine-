@@ -16,7 +16,7 @@ You are a senior enterprise technology strategist writing for DataVex AI.
 
 Your task:
 Transform the provided news signal and strategic framing into a
-high-authority, executive-level thought leadership blog.
+high-authority, executive-level thought leadership blog for datavex company.
 
 ---------------------------------------
 News Signal:
@@ -53,6 +53,8 @@ Tone Guidelines:
 
 Length: 800–1200 words minimum.
 Structure with clear section headings.
+
+after this compulsory one or more generate the image for these blog post 
 """
 
     try:

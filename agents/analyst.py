@@ -45,7 +45,9 @@ def analyst_agent():
 
     payload = {
         "q": query,
-        "num": 5
+        "num": 5,
+        "tbs": "qdr:12h"
+        
     }
 
     headers = {
@@ -152,3 +154,30 @@ def analyst_agent():
             "published_at": selected_article.get("published_at")
         }
     }
+from datetime import datetime
+
+def calculate_score(article):
+    score = 0
+
+    title = article.get("title", "")
+    date_str = article.get("date", "")
+
+    # Recency Boost
+    try:
+        article_date = datetime.strptime(date_str, "%b %d, %Y")
+        seconds_old = (datetime.now() - article_date).total_seconds()
+
+        if seconds_old < 3600:  # within 1 hour
+            score += 10
+        elif seconds_old < 7200:
+            score += 5
+        elif seconds_old < 86400:
+            score += 2
+    except:
+        pass
+
+    # Slight boost for longer enterprise headlines
+    if len(title.split()) > 8:
+        score += 2
+
+    return score
