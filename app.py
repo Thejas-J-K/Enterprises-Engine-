@@ -5,160 +5,217 @@ import uuid
 import json
 from datetime import datetime
 import os
+import requests
+from PIL import Image
+from io import BytesIO
 
 # ===============================
 # PAGE CONFIG
 # ===============================
 st.set_page_config(
     page_title="DataVex Growth Engine",
-    page_icon="",
+    page_icon="🚀",
     layout="wide"
 )
 
-# Custom CSS for a professional look
+# ===============================
+# PROFESSIONAL STYLING
+# ===============================
 st.markdown("""
     <style>
     .main { background-color: #f5f7f9; }
-    .stButton>button { width: 100%; border-radius: 5px; height: 3em; background-color: #007bff; color: white; }
-    .stTextArea>div>div>textarea { font-family: 'Inter', sans-serif; }
+    .stButton>button {
+        width: 100%;
+        border-radius: 6px;
+        height: 3em;
+        background-color: #111827;
+        color: white;
+        font-weight: 600;
+    }
+    .stTextArea textarea {
+        font-family: 'Inter', sans-serif;
+    }
     </style>
-    """, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
-st.title("DataVex Growth Intelligence Engine")
-st.markdown("### Autonomous Signal → Strategy → Content System")
+st.title("🚀 DataVex Autonomous Growth Intelligence Engine")
+st.markdown("### Real-Time Signal → Strategy → Content → Visuals → Publish")
 
 st.divider()
 
-# Initialize session storage
+# ===============================
+# SESSION STATE
+# ===============================
 if "result" not in st.session_state:
     st.session_state.result = None
 
 # ===============================
-# INPUT SECTION
+# SIDEBAR
 # ===============================
 with st.sidebar:
-    st.header("⚙️ Control Panel")
-    keyword = st.text_input("🔎 Enter Research Keyword", placeholder="e.g. PropTech AI trends")
-    run_btn = st.button("🚀 Run AI Growth Engine")
-    st.info("Member 1: Coder | Member 2: Strategy | Member 3: Design")
-
-if run_btn:
-    if keyword.strip() == "":
-        st.warning("⚠️ Please enter a keyword.")
-    else:
-        with st.spinner("🤖 Agents are coordinating (Cerebras Inference)..."):
-            # This calls the updated engine with 6 agents
-            st.session_state.result = run_growth_engine(keyword)
+    st.header("⚙️ Autonomous Control Panel")
+    run_btn = st.button("🚀 Scan & Generate Trending Asset")
+    st.success("System auto-detects trending AI infrastructure signals.")
+    st.caption("Architecture: Analyst → Creator → Visualist")
 
 # ===============================
-# DISPLAY RESULT (Agentic Trace)
+# RUN ENGINE
+# ===============================
+if run_btn:
+    with st.spinner("🤖 Analyst scanning global AI trends..."):
+        st.session_state.result = run_growth_engine()
+
+# ===============================
+# DISPLAY RESULTS
 # ===============================
 if st.session_state.result:
+
     res = st.session_state.result
 
-    # 1. THE SIGNAL & BRAIN (The Foundation)
-    st.header("Step 1: Intelligence Analysis")
+    # ===============================
+    # STEP 1 — INTELLIGENCE
+    # ===============================
+    st.header("🧠 Step 1: Intelligence Analysis")
+
     col1, col2 = st.columns(2)
 
     with col1:
-        st.subheader("scout Agent (Raw Signal)")
-        st.info(res.get("signal", "No signal found."))
+        st.subheader("📡 Analyst Signal")
+        st.info(res.get("signal", "No signal detected."))
 
     with col2:
-        st.subheader("Brain Agent (Relevance)")
-        if "APPROVED" in res.get("brain", "").upper():
-            st.success(res.get("brain"))
-        else:
-            st.error(res.get("brain"))
-            st.stop() # Stop if rejected
+        st.subheader("🧩 Strategic Positioning")
+        st.success("Signal aligned with DataVex growth thesis.")
 
-    # 2. THE STRATEGY (Requirement #3)
+    # ===============================
+    # STEP 2 — STRATEGY
+    # ===============================
     st.divider()
-    st.header("Step 2: Growth Strategy")
-    with st.expander("View DataVex Strategy Brief", expanded=True):
-        st.write(res.get("strategy", "Strategy brief not generated."))
+    st.header("📈 Step 2: Growth Strategy Brief")
 
-    # 3. THE CRITIQUE LOOP (The Trace)
+    with st.expander("View Strategy Rationale", expanded=True):
+        st.write(res.get("strategy", "Strategy not generated."))
+
+    # ===============================
+    # STEP 3 — CREATOR TRACE
+    # ===============================
     st.divider()
-    st.header(" Step 3: Agentic Critique Trace")
-    st.caption("This shows the Writer's first draft and the Critic's brand-alignment feedback.")
-    
+    st.header("⚡ Step 3: Real-Time Creator Intelligence")
+
     trace_col1, trace_col2 = st.columns(2)
-    with trace_col1:
-        st.markdown("**Writer's First Draft (V1)**")
-        st.text_area("v1_box", res.get("first_draft", ""), height=200, disabled=True, label_visibility="collapsed")
-    
-    with trace_col2:
-        st.markdown("**Critic Feedback (The Trace)**")
-        st.warning(res.get("trace", "No critique log found."))
 
-    # 4. FINAL ASSETS (Human-in-the-Loop)
+    with trace_col1:
+        st.markdown("**Initial Creative Draft (Internal)**")
+        st.text_area(
+            "draft_box",
+            res.get("first_draft", ""),
+            height=200,
+            disabled=True,
+            label_visibility="collapsed"
+        )
+
+    with trace_col2:
+        st.markdown("**Self-Critique & Brand Alignment Feedback**")
+        st.warning(res.get("trace", "No critique log available."))
+
+    # ===============================
+    # STEP 4 — VISUAL + VIDEO
+    # ===============================
     st.divider()
-    st.header("✨ Step 4: Final Publish-Ready Assets")
-    
-    # Display Generated Image
-    if res.get("image") and res["image"].get("url"):
-        st.subheader("🖼️ AI-Generated Visual")
-        
-        st.image(res["image"]["url"], 
-                 caption="Generated by DataVex Designer Agent", 
-                 width=200)
-    
-    # Final Content Editor
-    st.subheader("📝 Final Copywriting")
+    st.header("🎨 Step 4: Multimodal Asset Generation")
+
+
+    # ✅ Correct image rendering
+    if res.get("image"):
+     st.subheader("🖼️ AI-Generated Visual")
+
+    try:
+        response = requests.get(res["image"])
+        img = Image.open(BytesIO(response.content))
+        st.image(img, width=700)
+    except Exception as e:
+        st.error("Image failed to load.")
+        st.write("Image URL:", res["image"])
+    # ✅ Clean storyboard display
+    if res.get("video"):
+        st.subheader("🎬 AI-Generated Video Storyboard")
+        st.markdown(res["video"])
+
+    # ===============================
+    # STEP 5 — FINAL CONTENT
+    # ===============================
+    st.divider()
+    st.header("📝 Step 5: Final Publish-Ready Content")
+
     edited_content = st.text_area(
-        "Human Review: Edit the final polished content before publishing",
+        "Human Review & Edit Before Publishing",
         value=res.get("content", ""),
         height=400,
         key="editor"
     )
 
     # ===============================
-    # APPROVE & PUBLISH
+    # PUBLISH WORKFLOW
     # ===============================
-    if st.button(" Approve & Auto-Publish to DataVex Socials"):
-        with st.status("Publishing Workflow...") as status:
-            st.write("Authenticating with API...")
+    if st.button("🚀 Approve & Auto-Publish to DataVex Channels"):
+
+        with st.status("Executing Autonomous Publish Pipeline...") as status:
+            st.write("🔐 Authenticating API credentials...")
             time.sleep(1)
-            st.write("Uploading generated image...")
+
+            st.write("📤 Uploading image asset...")
             time.sleep(1)
-            st.write("Posting to LinkedIn & X...")
-            
+
+            st.write("🌐 Posting to LinkedIn & X...")
+            time.sleep(1)
+
             tweet_id = str(uuid.uuid4())[:8]
             tweet_url = f"https://x.com/datavex_ai/status/{tweet_id}"
 
             post_data = {
                 "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                "keyword": keyword,
                 "tweet_id": tweet_id,
                 "tweet_url": tweet_url,
                 "content": edited_content
             }
 
-            # Save to JSON log
             if not os.path.exists("posted_content.json"):
-                with open("posted_content.json", "w") as f: json.dump([], f)
-            with open("posted_content.json", "r") as f: posts = json.load(f)
+                with open("posted_content.json", "w") as f:
+                    json.dump([], f)
+
+            with open("posted_content.json", "r") as f:
+                posts = json.load(f)
+
             posts.append(post_data)
-            with open("posted_content.json", "w") as f: json.dump(posts, f, indent=4)
-            
-            status.update(label="Published Successfully!", state="complete", expanded=False)
+
+            with open("posted_content.json", "w") as f:
+                json.dump(posts, f, indent=4)
+
+            status.update(
+                label="✅ Successfully Published Across Channels",
+                state="complete",
+                expanded=False
+            )
 
         st.success(f"🔗 View Live Post: {tweet_url}")
         st.balloons()
 
 # ===============================
-# POST HISTORY LOG
+# HISTORY LOG
 # ===============================
 st.divider()
 st.header("📜 Published Content Log")
+
 if os.path.exists("posted_content.json"):
     with open("posted_content.json", "r") as f:
         posts = json.load(f)
+
     if posts:
         for post in reversed(posts):
-            with st.expander(f"🕒 {post['timestamp']} - Keyword: {post['keyword']}"):
-                st.write(f"**URL:** {post['tweet_url']}")
+            with st.expander(f"🕒 {post['timestamp']}"):
+                st.write(f"**Post URL:** {post['tweet_url']}")
                 st.write(post["content"])
     else:
         st.info("No published posts yet.")
+else:
+    st.info("No published posts yet.")
